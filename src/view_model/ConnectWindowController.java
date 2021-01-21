@@ -44,7 +44,6 @@ public class ConnectWindowController implements Observer  {
 		mainWindowController.simulatorConnected();
 	}
 
-	
 	private boolean connect(String ip, int port) {
 		client.connect(ip, port);
 		
