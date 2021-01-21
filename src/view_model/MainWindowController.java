@@ -7,11 +7,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Observable;
 import java.util.Observer;
-
 import clientX.Client;
 import clientX.SimpleClient;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -25,10 +23,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.PathSolverModel;
 import model.PlaneLocationModel;
 import view.Main;
 import view.Map;
-//import view_model.MainWindowViewModel;
 
 public class MainWindowController implements Observer {
 	
@@ -51,6 +49,7 @@ public class MainWindowController implements Observer {
 	interpreterX.Interpreter interpreter;
 	Client client;
 	private PlaneLocationModel planeLocModel;
+	private PathSolverModel pathSolverModel;
 	
 	private File txt;
 	private File csv;
@@ -68,10 +67,8 @@ public class MainWindowController implements Observer {
 		this.interpreter = new interpreterX.Interpreter();
 		this.client = new SimpleClient();
 		this.planeLocModel = new PlaneLocationModel(this);
+		this.pathSolverModel = new PathSolverModel(this);
 		planeLocModel.setClient(client);
-//		this.map.paintMap();
-		
-
 	}
 	
 	// Methods
@@ -88,19 +85,15 @@ public class MainWindowController implements Observer {
 		});
 		
 		btnConnect.setOnMouseClicked((event) -> {
-			// TODO: Add code for connecting.
 		});
 		
 		btnCalc.setOnMouseClicked((event) -> {
-			// TODO: Add code for calculating the path.
-			onCalculatePathButtonPressed(event);
 		});
 		
 		btnRunCodeCommands.setOnMouseClicked((event) -> {
 		    String[] lines;
 			
 		    try {
-		    	System.out.println("Sending commands");
 				lines = Files.lines(txt.toPath()).toArray(String[]::new);
 			      interpreter.runSimulator(lines);
 			      interpreter.getManager().getParser().Resume();
@@ -108,20 +101,16 @@ public class MainWindowController implements Observer {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		});
 	}
 	
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
 		
 	}
 	
 	public void onMapClicked(MouseEvent event) {
-		// TODO: Implement.
-		System.out.println("The map was clicked.");
-		this.map.setDestination(event.getX(), event.getY());
+		this.map.setDestination(event.getX() / this.map.getSqrWidth(), event.getY() / this.map.getSqrHeight());
 		this.map.paintAll();
 	}
 	
@@ -139,7 +128,6 @@ public class MainWindowController implements Observer {
 			
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -157,9 +145,9 @@ public class MainWindowController implements Observer {
 		}
 	}
 	
-	public void onCalculatePathButtonPressed(MouseEvent event) {
+	public void onCalculatePathButtonPressed() {
 		try {
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CalculatePathWindow.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("CalculatePathWindow.fxml"));
 			AnchorPane window = (AnchorPane) fxmlLoader.load();
 			CalculatePathWindowController controller = fxmlLoader.getController();
 			controller.setMainController(this);
@@ -168,7 +156,6 @@ public class MainWindowController implements Observer {
 			this.calculatePathWindow.setScene(scene);
 			this.calculatePathWindow.show();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -235,5 +222,24 @@ public class MainWindowController implements Observer {
 
 	public void setSpeed(Double speed) {
 		this.airspeed.setText(speed + "");
+	}
+
+	public void setPathSolverIP(String ip) {
+		this.pathSolverModel.setIP(ip);
+	}
+
+	public void setPathSolverPort(String port) {
+		this.pathSolverModel.setPort(port);
+	}
+	
+	public void calculatePath() {
+		this.pathSolverModel.setSrcX((int) this.map.getSrcX());
+		this.pathSolverModel.setSrcY((int) this.map.getSrcY());
+		this.pathSolverModel.setDestX((int) this.map.getDestX());
+		this.pathSolverModel.setDestY((int) this.map.getDestY());
+		this.pathSolverModel.setHeightMap(this.map.getMatrix());
+		this.pathSolverModel.calculateShortestPath();
+		int[][] path = this.pathSolverModel.getPath();
+		this.map.setPath(path);
 	}
 }

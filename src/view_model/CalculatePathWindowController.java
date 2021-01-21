@@ -13,8 +13,7 @@ public class CalculatePathWindowController {
 	@FXML
 	TextField txtPort;
 	
-	private MainWindowController mainController;
-//	private MainWindowViewModel viewModel;
+	private MainWindowController controller;
 	
 	// Constructors
 	public CalculatePathWindowController() {
@@ -22,20 +21,28 @@ public class CalculatePathWindowController {
 	}
 	
 	// Methods
+	public void initialize() {
+		setDefaults();
+	}
+	
 	public void onConnectButtonPressed() {
-//		this.viewModel.setPathSolverIP(txtIP.getText());
-//		this.viewModel.setPathSolverPort(txtPort.getText());
-//		this.viewModel.calculatePath();
-		this.mainController.closeCalculatePathWindow();
+		this.controller.setPathSolverIP(txtIP.getText());
+		this.controller.setPathSolverPort(txtPort.getText());
+		this.controller.calculatePath();
+		this.controller.closeCalculatePathWindow();
 	}
 	
 	// Getters & Setters
-	public MainWindowController getMainController() {
-		return mainController;
+	public MainWindowController getController() {
+		return controller;
 	}
 
-	public void setMainController(MainWindowController mainController) {
-		this.mainController = mainController;
-//		this.viewModel = mainController.ViewModel;
+	public void setMainController(MainWindowController controller) {
+		this.controller = controller;
+	}
+	
+	public void setDefaults() {
+		this.txtIP.setText("127.0.0.1");
+		this.txtPort.setText("1111");
 	}
 }

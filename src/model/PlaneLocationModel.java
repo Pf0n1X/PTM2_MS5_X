@@ -43,7 +43,7 @@ public class PlaneLocationModel {
 		                y = (lat - initY + distance) / distance;
 		                y *= -1;
 		                
-		                System.out.println("X: " + x + " Y: " + y);
+//		                System.out.println("X: " + x + " Y: " + y);
 		                
 		                setCoordinates(x, y);
 		                setAltitude(alt);

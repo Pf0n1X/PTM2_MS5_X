@@ -6,15 +6,11 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Scanner;
-
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-//import view_model.MainWindowViewModel;
 import view_model.MainWindowController;
 
 public class Map extends Canvas {
@@ -54,9 +50,6 @@ public class Map extends Canvas {
 		
 		// Get the map contro's height.
 		this.ctrlHeight = getHeight();
-		
-//		// Clear the block.
-//		graphicsContext.clearRect(0, 0, ctrlWidth, ctrlHeight);
 		
 		// Calculate a square's height
 		this.sqrHeight = ctrlHeight / this.matrix.length;
@@ -154,6 +147,77 @@ public class Map extends Canvas {
 				}
 	}
 	
+	private void paintDestination() {
+		try {
+			GraphicsContext gc = getGraphicsContext2D();
+			gc.drawImage(new Image(new FileInputStream("./src/resources/destination.png")), 
+					sqrWidth * destX,
+					sqrHeight * destY - MARKER_SIZE / 2,
+					MARKER_SIZE, 
+					MARKER_SIZE);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void paintSource() {
+		try {
+
+			GraphicsContext gc = getGraphicsContext2D();
+
+			gc.drawImage(new Image(new FileInputStream("./src/resources/source.png")), 
+					sqrWidth * srcX,
+					sqrHeight * srcY,
+					MARKER_SIZE, 
+					MARKER_SIZE);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void paintAll() {
+		getGraphicsContext2D().clearRect(0, 0, getWidth(), getHeight());
+		paintMap();
+		paintPath();
+		paintSource();
+		paintDestination();
+	}
+	
+	public void getArrayFromFile(File file) {
+		try {
+			Scanner scanner = new Scanner(file);
+			scanner.useDelimiter("\r\n");
+			
+			double[] zeroLocation = Arrays.asList(scanner.next().split(",")).stream().mapToDouble(cell -> Double.parseDouble(cell)).toArray();
+			double kmPerBlock = Arrays.asList(scanner.next().split(",")).stream().mapToDouble(cell -> Double.parseDouble(cell)).toArray()[0];
+			this.mainWindowController.setInitY(zeroLocation[1]);
+			this.mainWindowController.setInitX(zeroLocation[0]);
+			this.mainWindowController.setKMPerBlock(kmPerBlock);
+			
+			LinkedList<String> lines = new LinkedList<String>();
+			
+			while(scanner.hasNext()) {
+				lines.add(scanner.next());
+			}
+			
+			scanner.close();
+			this.matrix = new double[lines.size()][lines.get(0).length()];
+			for (int i = 0; i < lines.size(); i ++) {
+				String line = lines.get(i);
+				double[] lineCells = Arrays.asList(line.split(",")).stream().mapToDouble(cell -> Double.parseDouble(cell)).toArray();
+				this.matrix[i] = lineCells;
+			}
+			
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	// Getters & Setters
 	public double[][] getMatrix() {
 		return matrix;
@@ -223,93 +287,7 @@ public class Map extends Canvas {
 		this.csv = csv;
 		getArrayFromFile(csv);
 	}
-
-	// Methods
-	public void getArrayFromFile(File file) {
-		try {
-			Scanner scanner = new Scanner(file);
-			scanner.useDelimiter("\r\n");
-			
-			double[] zeroLocation = Arrays.asList(scanner.next().split(",")).stream().mapToDouble(cell -> Double.parseDouble(cell)).toArray();
-			double kmPerBlock = Arrays.asList(scanner.next().split(",")).stream().mapToDouble(cell -> Double.parseDouble(cell)).toArray()[0];
-			this.mainWindowController.setInitY(zeroLocation[1]);
-			this.mainWindowController.setInitX(zeroLocation[0]);
-			this.mainWindowController.setKMPerBlock(kmPerBlock);
-			
-			LinkedList<String> lines = new LinkedList<String>();
-			
-			while(scanner.hasNext()) {
-				lines.add(scanner.next());
-			}
-			
-			scanner.close();
-			this.matrix = new double[lines.size()][lines.get(0).length()];
-			for (int i = 0; i < lines.size(); i ++) {
-				String line = lines.get(i);
-				double[] lineCells = Arrays.asList(line.split(",")).stream().mapToDouble(cell -> Double.parseDouble(cell)).toArray();
-				this.matrix[i] = lineCells;
-			}
-			
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-
-//	public void setDestination(double x, double y) {
-//		this.destX = x;
-//		this.destY = y;
-//		this.viewModel.setDestX(x / this.sqrWidth);
-//		this.viewModel.setDestY(y / this.sqrHeight);
-//		this.setCsv(csv);
-//		getArrayFromFile(csv);
-//		paintMap();
-//		paintDestination();
-//	}
 	
-	private void paintDestination() {
-//		GraphicsContext graphics = getGraphicsContext2D();
-		try {
-//			System.out.println("Painting image at " + destY + " and " + destX);
-//			graphics.drawImage(new Image(new FileInputStream("./resources/destination.png")), destY, destX);
-			GraphicsContext gc = getGraphicsContext2D();
-			gc.drawImage(new Image(new FileInputStream("./src/resources/destination.png")), 
-					destX - MARKER_SIZE / 2,
-					destY - MARKER_SIZE / 2,
-					MARKER_SIZE, 
-					MARKER_SIZE);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	private void paintSource() {
-		try {
-
-			GraphicsContext gc = getGraphicsContext2D();
-
-			gc.drawImage(new Image(new FileInputStream("./src/resources/source.png")), 
-					sqrWidth * srcX,
-					sqrHeight * srcY,
-					MARKER_SIZE, 
-					MARKER_SIZE);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public void paintAll() {
-		getGraphicsContext2D().clearRect(0, 0, getWidth(), getHeight());
-		paintMap();
-		paintPath();
-		paintSource();
-		paintDestination();
-	}
-
 	public void setPath(int[][] path) {
 		this.path = path;
 	}
@@ -329,5 +307,21 @@ public class Map extends Canvas {
 	public void setDestination(double x, double y) {
 		this.destX = x;
 		this.destY = y;
+	}
+	
+	public void setDestX(double destX) {
+		this.destX = destX;
+	}
+	
+	public double getDestX() {
+		return this.destX;
+	}
+	
+	public void setDestY(double destY) {
+		this.destY = destY;
+	}
+	
+	public double getDestY() {
+		return this.destY;
 	}
 }
