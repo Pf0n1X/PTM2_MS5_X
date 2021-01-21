@@ -26,7 +26,7 @@ public class PlaneLocationModel {
 	
 	// Methods
 	public void run() {
-		Timeline fourSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(0.25),
+		Timeline fourSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(4),
 				new EventHandler<ActionEvent>() {
 
 					@Override
