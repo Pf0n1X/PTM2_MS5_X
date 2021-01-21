@@ -29,7 +29,7 @@ import view.Main;
 import view.Map;
 
 public class MainWindowController implements Observer {
-	
+
 	@FXML
 	Button btnCalc, btnConnect, btnRunCodeCommands;
 	@FXML
@@ -44,23 +44,31 @@ public class MainWindowController implements Observer {
 	Slider sRudder, sThrottle;
 	@FXML
 	Map map;
-	
+
 	// Data Members
 	interpreterX.Interpreter interpreter;
 	Client client;
 	private PlaneLocationModel planeLocModel;
 	private PathSolverModel pathSolverModel;
-	
+
 	private File txt;
 	private File csv;
 //	MainWindowViewModel ViewModel;
 	DoubleProperty alieronVal, elevatorVal, flapsval;
 	private Stage connectWindow;
 	private Stage calculatePathWindow;
-	
+
+	// Manual Mode variables
+	private double radius = 0;
+	private double xCenter = 0;
+	private double yCenter = 0;
+	private double initializedXCenter = 0;
+	private double initializedYCenter = 0;
+
 	String MCL = "Manual Controls locked! - To manualy control the aircraft you need to press the Manual Controls button first";
 	String APL = "Cannot Execute! = To use the AutoPilot option you need to press the AutoPilot mode Button first";
 	String na = "N/A";
+
 	// Constructors
 	public MainWindowController() {
 		// TODO Auto-generated constructor stub
@@ -70,50 +78,61 @@ public class MainWindowController implements Observer {
 		this.pathSolverModel = new PathSolverModel(this);
 		planeLocModel.setClient(client);
 	}
-	
+
 	// Methods
 	@FXML
 	public void initialize() {
 		this.map.setMainWindowController(this);
+		initializedXCenter = circleJoystick.getLayoutX();
+		initializedYCenter = circleJoystick.getLayoutY();
 		sRudder.valueProperty().addListener((obs, prevVal, newVal) -> {
-			// TODO: Add code for changing rudder.
-			this.client.set("/controls/flight/rudder", newVal.doubleValue());
+			if (this.radioBtnManual.isSelected()) {
+
+				this.client.set("/controls/flight/rudder", newVal.doubleValue());
+			} else {
+				this.sRudder.setValue(0.0);
+			}
 		});
-		
+
 		sThrottle.valueProperty().addListener((obs, prevVal, newVal) -> {
-			this.client.set("/controls/engines/current-engine/throttle", newVal.doubleValue());
+			if (this.radioBtnManual.isSelected()) {
+
+				this.client.set("/controls/engines/current-engine/throttle", newVal.doubleValue());
+			} else {
+				this.sThrottle.setValue(0.0);
+			}
 		});
-		
+
 		btnConnect.setOnMouseClicked((event) -> {
 		});
-		
+
 		btnCalc.setOnMouseClicked((event) -> {
 		});
-		
+
 		btnRunCodeCommands.setOnMouseClicked((event) -> {
-		    String[] lines;
-			
-		    try {
+			String[] lines;
+
+			try {
 				lines = Files.lines(txt.toPath()).toArray(String[]::new);
-			      interpreter.runSimulator(lines);
-			      interpreter.getManager().getParser().Resume();
+				interpreter.runSimulator(lines);
+				interpreter.getManager().getParser().Resume();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		});
 	}
-	
+
 	@Override
 	public void update(Observable o, Object arg) {
-		
+
 	}
-	
+
 	public void onMapClicked(MouseEvent event) {
 		this.map.setDestination(event.getX() / this.map.getSqrWidth(), event.getY() / this.map.getSqrHeight());
 		this.map.paintAll();
 	}
-	
+
 	public void onConnectButtonPressed() {
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ConnectWindow.fxml"));
@@ -125,18 +144,16 @@ public class MainWindowController implements Observer {
 			this.connectWindow = new Stage();
 			connectWindow.setScene(scene);
 			connectWindow.show();
-			
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void closeConnectWindow() {
 		connectWindow.close();
 	}
-	
-	
+
 	public void loadData() {
 		this.csv = fileLoader();
 		if (this.csv != null) {
@@ -144,7 +161,25 @@ public class MainWindowController implements Observer {
 			this.map.paintMap();
 		}
 	}
-	
+
+	public void toggleManualPilot() {
+		if (this.radioBtnAutopilot.isSelected()) {
+			this.radioBtnAutopilot.setSelected(false);
+
+		}
+		this.radioBtnManual.setSelected(true);
+		this.statlabel.setText("Manual mode is ON");
+	}
+
+	public void toggleAutoPilot() {
+		if (this.radioBtnManual.isSelected()) {
+			this.radioBtnManual.setSelected(false);
+
+		}
+		this.radioBtnAutopilot.setSelected(true);
+		this.statlabel.setText("AutoPilot mode is ON");
+	}
+
 	public void onCalculatePathButtonPressed() {
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("CalculatePathWindow.fxml"));
@@ -159,17 +194,17 @@ public class MainWindowController implements Observer {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void closeCalculatePathWindow() {
 		if (this.calculatePathWindow != null) {
 			this.calculatePathWindow.close();
 			this.calculatePathWindow = null;
 		}
 	}
-	
+
 	public void loadTextFile() throws IOException {
 		this.txt = this.fileLoader();
-		
+
 		if (this.txt != null) {
 			BufferedReader br = new BufferedReader(new FileReader(this.txt));
 			StringBuilder sb = new StringBuilder();
@@ -194,10 +229,26 @@ public class MainWindowController implements Observer {
 		return chosen;
 	}
 
+	public void resetThrottle() {
+		if (this.radioBtnManual.isSelected()) {
+			this.sThrottle.setValue(0.0);
+			this.client.set("/controls/engines/current-engine/throttle", 0.0);
+		} else
+			this.statlabel.setText(MCL);
+	}
+
+	public void resetRudder() {
+		if (this.radioBtnManual.isSelected()) {
+			this.sRudder.setValue(0.0);
+			this.client.set("/controls/flight/rudder", 0.0);
+		} else
+			this.statlabel.setText(MCL);
+	}
+
 	public void setInitY(double initY) {
 		this.planeLocModel.setInitY(initY);
 	}
-	
+
 	public void setInitX(double initX) {
 		this.planeLocModel.setInitX(initX);
 	}
@@ -231,7 +282,7 @@ public class MainWindowController implements Observer {
 	public void setPathSolverPort(String port) {
 		this.pathSolverModel.setPort(port);
 	}
-	
+
 	public void calculatePath() {
 		this.pathSolverModel.setSrcX((int) this.map.getSrcX());
 		this.pathSolverModel.setSrcY((int) this.map.getSrcY());
@@ -241,5 +292,65 @@ public class MainWindowController implements Observer {
 		this.pathSolverModel.calculateShortestPath();
 		int[][] path = this.pathSolverModel.getPath();
 		this.map.setPath(path);
+	}
+
+	public void onJoystickRelease(MouseEvent event) {
+		circleJoystick.setCenterX(0);
+		circleJoystick.setCenterY(0);
+
+		client.set("/controls/flight/aileron", 0.0);
+		client.set("/controls/flight/elevator", 0.0);
+	}
+
+	private double distance(double x1, double y1, double x2, double y2) {
+		return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+	}
+
+	public void onJoystickDrag(MouseEvent event) {
+		if (this.radioBtnManual.isSelected()) {
+			if (event.getX() <= 100 && event.getX() >= -100)
+				if (radius == 0) {
+					radius = circleJoystickBorder.getRadius();
+					xCenter = (circleJoystick.localToScene(circleJoystick.getBoundsInLocal()).getMinX()
+							+ circleJoystick.localToScene(circleJoystick.getBoundsInLocal()).getMaxX()) / 2;
+					yCenter = (circleJoystick.localToScene(circleJoystick.getBoundsInLocal()).getMinY()
+							+ circleJoystick.localToScene(circleJoystick.getBoundsInLocal()).getMaxY()) / 2;
+				}
+
+			double x1 = event.getSceneX();
+			double y1 = event.getSceneY();
+			double x2, y2;
+			final int div = 2;
+			double distance = distance(event.getSceneX(), event.getSceneY(), xCenter, yCenter);
+			if (distance <= radius / div) {
+				circleJoystick.setLayoutX(initializedXCenter + x1 - xCenter);
+				circleJoystick.setLayoutY(initializedYCenter + y1 - yCenter);
+
+				x2 = x1;
+				y2 = y1;
+			} else {
+				if (x1 > xCenter) {
+					double alfa = Math.atan((y1 - yCenter) / (x1 - xCenter));
+					double w = radius * Math.cos(alfa);
+					double z = radius * Math.sin(alfa);
+
+					x2 = xCenter + w / div;
+					y2 = yCenter + z / div;
+				} else {
+					double alfa = Math.atan((yCenter - y1) / (xCenter - x1));
+					double w = radius * Math.cos(alfa);
+					double z = radius * Math.sin(alfa);
+					x2 = xCenter - w / div;
+					y2 = yCenter - z / div;
+				}
+
+				circleJoystick.setLayoutX(initializedXCenter + x2 - xCenter);
+				circleJoystick.setLayoutY(initializedYCenter + y2 - yCenter);
+			}
+			client.set("/controls/flight/aileron", (x2 - xCenter) / radius);
+			client.set("/controls/flight/elevator", (yCenter - y2) / radius);
+		} else
+			this.statlabel.setText(MCL);
+
 	}
 }

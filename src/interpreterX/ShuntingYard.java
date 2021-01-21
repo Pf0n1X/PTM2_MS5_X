@@ -40,8 +40,8 @@ public class ShuntingYard
     static int flag=0;
     private static ArrayList<String> SplitStringExpression(String expression) throws Exception
     {
-        expression = expression.replace('â€“','-');
-        ArrayList<String> arrayList=new ArrayList<>();
+    	expression = expression.replace('–','-');
+    	ArrayList<String> arrayList=new ArrayList<>();
         String[] expressionchar =expression.split("");
         String num = "";
         for(int i=0;i<expressionchar.length;i++)

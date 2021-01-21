@@ -14,7 +14,7 @@ public class Main extends Application {
 			FXMLLoader fxml = new FXMLLoader();
 			BorderPane root = (BorderPane) fxml.load(getClass().getResource("MainWindow.fxml").openStream());
 			Scene scene = new Scene(root, 870, 320);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+//			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
