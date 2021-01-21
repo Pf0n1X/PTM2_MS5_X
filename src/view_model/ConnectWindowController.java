@@ -42,6 +42,7 @@ public class ConnectWindowController implements Observer  {
 	public void onConnectButtonPressed() {
 		connect(txtIP.textProperty().get(), Integer.parseInt(txtPort.textProperty().get()));
 		mainWindowController.simulatorConnected();
+		mainWindowController.closeConnectWindow();	
 	}
 
 	private boolean connect(String ip, int port) {

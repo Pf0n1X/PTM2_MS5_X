@@ -51,7 +51,7 @@
 	       		<ButtonBar BorderPane.alignment="CENTER">
 		            <buttons>
 		                <Button mnemonicParsing="false" onAction="#loadTextFile" prefHeight="25.0" prefWidth="200.0" text="Load" />
-		                <RadioButton fx:id="radioBtnAutopilot" mnemonicParsing="false" prefWidth="113.0" text="AutoPilot" />
+		                <RadioButton fx:id="radioBtnAutopilot" onAction="#toggleAutoPilot" mnemonicParsing="false" prefWidth="113.0" text="AutoPilot" />
 		            	<Button fx:id="btnRunCodeCommands" mnemonicParsing="false" text="Run" />
 		            </buttons>
 	       		</ButtonBar>
@@ -69,7 +69,7 @@
       <AnchorPane prefHeight="300" prefWidth="350" BorderPane.alignment="CENTER">
          <children>
             <HBox prefHeight="100" prefWidth="200" />
-            <RadioButton fx:id="radioBtnManual" layoutX="90.0" layoutY="4.0" mnemonicParsing="false"  prefHeight="17.0" prefWidth="118.0" text="Manual Contorls" textAlignment="CENTER" />
+            <RadioButton fx:id="radioBtnManual" layoutX="90.0" layoutY="4.0" onAction="#toggleManualPilot" mnemonicParsing="false"  prefHeight="17.0" prefWidth="118.0" text="Manual Contorls" textAlignment="CENTER" />
             <Slider fx:id="sRudder" layoutX="56.0" layoutY="277.0" max="1.0" min="-1.0" prefHeight="16.0" prefWidth="200.0" />
             <Slider fx:id="sThrottle" layoutX="27.0" layoutY="63.0" max="1.0" orientation="VERTICAL" prefHeight="190.0" prefWidth="16.0" />
             <Circle fx:id="circleJoystickBorder" fill="#babfc3" layoutX="153.0" layoutY="161.0" radius="100.0" stroke="BLACK" strokeType="INSIDE">
@@ -101,12 +101,12 @@
                </cursor>
             </Circle>
             
-                <Button layoutX="43.0" layoutY="234.0" mnemonicParsing="false" text="R">
+                <Button layoutX="43.0" onAction="#resetThrottle" layoutY="234.0" mnemonicParsing="false" text="R">
                <font>
                   <Font size="10.0" />
                </font>
             </Button>
-            <Button layoutX="259.0" layoutY="285.0" mnemonicParsing="false" text="R">
+            <Button layoutX="259.0" onAction="#resetRudder" layoutY="285.0" mnemonicParsing="false" text="R">
                <font>
                   <Font size="10.0" />
                </font>
