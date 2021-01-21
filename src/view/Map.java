@@ -23,7 +23,6 @@ public class Map extends Canvas {
 	private double[][] matrix;
 	private double maxVal;
 	private double minVal;
-//	private MainWindowViewModel viewModel;
 	private double destX;
 	private double destY;
 	private double srcX;
@@ -47,11 +46,6 @@ public class Map extends Canvas {
 	
 	// Methods
 	public void paintMap() {
-		
-		// TODO: Delete this
-//		this.viewModel.setSrcX(this.matrix[0].length);
-//		this.viewModel.setSrcY(this.matrix.length);
-		
 		GraphicsContext graphicsContext = getGraphicsContext2D();
 		Color color;
 		
@@ -254,10 +248,8 @@ public class Map extends Canvas {
 				String line = lines.get(i);
 				double[] lineCells = Arrays.asList(line.split(",")).stream().mapToDouble(cell -> Double.parseDouble(cell)).toArray();
 				this.matrix[i] = lineCells;
-//				System.out.println(lineCells.toString());
 			}
 			
-//			this.viewModel.setMap(this.matrix);
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -332,5 +324,10 @@ public class Map extends Canvas {
 
 	public void setMainWindowController(MainWindowController mainWindowController) {
 		this.mainWindowController = mainWindowController;
+	}
+
+	public void setDestination(double x, double y) {
+		this.destX = x;
+		this.destY = y;
 	}
 }

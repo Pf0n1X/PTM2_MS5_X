@@ -118,6 +118,13 @@ public class MainWindowController implements Observer {
 		
 	}
 	
+	public void onMapClicked(MouseEvent event) {
+		// TODO: Implement.
+		System.out.println("The map was clicked.");
+		this.map.setDestination(event.getX(), event.getY());
+		this.map.paintAll();
+	}
+	
 	public void onConnectButtonPressed() {
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ConnectWindow.fxml"));
