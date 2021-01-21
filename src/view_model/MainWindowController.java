@@ -205,7 +205,7 @@ public class MainWindowController implements Observer {
 	}
 	
 	public void setInitX(double initX) {
-		this.planeLocModel.setInitY(initX);
+		this.planeLocModel.setInitX(initX);
 	}
 
 	public void setKMPerBlock(double kmPerBlock) {
@@ -214,5 +214,19 @@ public class MainWindowController implements Observer {
 
 	public void simulatorConnected() {
 		this.planeLocModel.run();
+	}
+
+	public void setPlaneCoordinates(double x, double y) {
+		this.map.setSrcX(x);
+		this.map.setSrcY(y);
+		this.map.paintAll();
+	}
+
+	public void setAltitude(Double alt) {
+		this.altitude.setText(alt + "");
+	}
+
+	public void setSpeed(Double speed) {
+		this.airspeed.setText(speed + "");
 	}
 }

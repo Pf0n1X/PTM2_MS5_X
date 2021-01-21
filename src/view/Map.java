@@ -83,7 +83,6 @@ public class Map extends Canvas {
 				
 				// Set the color
 				graphicsContext.setFill(color);
-				System.out.println(j * sqrWidth + " " + i * sqrHeight + " " + sqrWidth + " " + sqrHeight);
 				graphicsContext.fillRect(j * sqrWidth, i * sqrHeight, sqrWidth, sqrHeight);
 				
 				// Type the text.
@@ -239,8 +238,8 @@ public class Map extends Canvas {
 			
 			double[] zeroLocation = Arrays.asList(scanner.next().split(",")).stream().mapToDouble(cell -> Double.parseDouble(cell)).toArray();
 			double kmPerBlock = Arrays.asList(scanner.next().split(",")).stream().mapToDouble(cell -> Double.parseDouble(cell)).toArray()[0];
-			this.mainWindowController.setInitY(zeroLocation[0]);
-			this.mainWindowController.setInitX(zeroLocation[1]);
+			this.mainWindowController.setInitY(zeroLocation[1]);
+			this.mainWindowController.setInitX(zeroLocation[0]);
 			this.mainWindowController.setKMPerBlock(kmPerBlock);
 			
 			LinkedList<String> lines = new LinkedList<String>();
@@ -284,7 +283,7 @@ public class Map extends Canvas {
 //			System.out.println("Painting image at " + destY + " and " + destX);
 //			graphics.drawImage(new Image(new FileInputStream("./resources/destination.png")), destY, destX);
 			GraphicsContext gc = getGraphicsContext2D();
-			gc.drawImage(new Image(new FileInputStream("./resources/destination.png")), 
+			gc.drawImage(new Image(new FileInputStream("./src/resources/destination.png")), 
 					destX - MARKER_SIZE / 2,
 					destY - MARKER_SIZE / 2,
 					MARKER_SIZE, 
@@ -300,7 +299,7 @@ public class Map extends Canvas {
 
 			GraphicsContext gc = getGraphicsContext2D();
 
-			gc.drawImage(new Image(new FileInputStream("./resources/source.png")), 
+			gc.drawImage(new Image(new FileInputStream("./src/resources/source.png")), 
 					sqrWidth * srcX,
 					sqrHeight * srcY,
 					MARKER_SIZE, 

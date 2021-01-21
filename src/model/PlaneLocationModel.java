@@ -35,15 +35,19 @@ public class PlaneLocationModel {
 						
 						Double lat = client.getValue("/position/latitude-deg");
 		                Double lon = client.getValue("/position/longitude-deg");
+		                Double alt = client.getValue("/instrumentation/altimeter/indicated-altitude-ft");
 		                Double heading = client.getValue("/instrumentation/heading-indicator/indicated-heading-deg");
+		                Double speed = client.getValue("/velocities/airspeed-kt");
 		                
 		                x = (lon - initX + distance) / distance;
 		                y = (lat - initY + distance) / distance;
 		                y *= -1;
 		                
-		                System.out.println("X: " + x + " Y: " + y);
+//		                System.out.println("X: " + x + " Y: " + y);
 		                
 		                setCoordinates(x, y);
+		                setAltitude(alt);
+		                setSpeed(speed);
 					}
 		}));
 		
@@ -51,9 +55,19 @@ public class PlaneLocationModel {
 		fourSecondsWonder.play();
 	}
 
+	protected void setSpeed(Double speed) {
+		this.controller.setSpeed(speed);
+	}
+
+	protected void setAltitude(Double alt) {
+		this.controller.setAltitude(alt);
+	}
+
 	private void setCoordinates(double x, double y) {
 		this.curX = x;
 		this.curY = y;
+		
+		this.controller.setPlaneCoordinates(x, y);
 	}
 
 	// Getters & Setters
