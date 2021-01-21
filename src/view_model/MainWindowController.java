@@ -293,31 +293,32 @@ public class MainWindowController implements Observer {
 		int[][] path = this.pathSolverModel.getPath();
 		this.map.setPath(path);
 	}
-	
+
 	@FXML
 	public void onJoystickRelease(MouseEvent event) {
+
 		circleJoystick.setCenterX(0);
 		circleJoystick.setCenterY(0);
-
-		client.set("/controls/flight/aileron", 0.0);
-		client.set("/controls/flight/elevator", 0.0);
 	}
 
 	private double distance(double x1, double y1, double x2, double y2) {
 		return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 	}
-	
+
 	@FXML
 	public void onJoystickDrag(MouseEvent event) {
 		if (this.radioBtnManual.isSelected()) {
 			if (event.getX() <= 100 && event.getX() >= -100)
-				if (radius == 0) {
-					radius = circleJoystickBorder.getRadius();
-					xCenter = (circleJoystick.localToScene(circleJoystick.getBoundsInLocal()).getMinX()
-							+ circleJoystick.localToScene(circleJoystick.getBoundsInLocal()).getMaxX()) / 2;
-					yCenter = (circleJoystick.localToScene(circleJoystick.getBoundsInLocal()).getMinY()
-							+ circleJoystick.localToScene(circleJoystick.getBoundsInLocal()).getMaxY()) / 2;
-				}
+				circleJoystick.setCenterX(event.getX());
+			circleJoystick.setCenterY(event.getY());
+
+			if (radius == 0) {
+				radius = circleJoystickBorder.getRadius();
+				xCenter = (circleJoystick.localToScene(circleJoystick.getBoundsInLocal()).getMinX()
+						+ circleJoystick.localToScene(circleJoystick.getBoundsInLocal()).getMaxX()) / 2;
+				yCenter = (circleJoystick.localToScene(circleJoystick.getBoundsInLocal()).getMinY()
+						+ circleJoystick.localToScene(circleJoystick.getBoundsInLocal()).getMaxY()) / 2;
+			}
 
 			double x1 = event.getSceneX();
 			double y1 = event.getSceneY();
@@ -325,8 +326,6 @@ public class MainWindowController implements Observer {
 			final int div = 2;
 			double distance = distance(event.getSceneX(), event.getSceneY(), xCenter, yCenter);
 			if (distance <= radius / div) {
-				circleJoystick.setLayoutX(initializedXCenter + x1 - xCenter);
-				circleJoystick.setLayoutY(initializedYCenter + y1 - yCenter);
 
 				x2 = x1;
 				y2 = y1;
@@ -345,9 +344,6 @@ public class MainWindowController implements Observer {
 					x2 = xCenter - w / div;
 					y2 = yCenter - z / div;
 				}
-
-				circleJoystick.setLayoutX(initializedXCenter + x2 - xCenter);
-				circleJoystick.setLayoutY(initializedYCenter + y2 - yCenter);
 			}
 			client.set("/controls/flight/aileron", (x2 - xCenter) / radius);
 			client.set("/controls/flight/elevator", (yCenter - y2) / radius);
