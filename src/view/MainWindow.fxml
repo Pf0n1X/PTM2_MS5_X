@@ -55,7 +55,7 @@
 		            	<Button fx:id="btnRunCodeCommands" mnemonicParsing="false" text="Run" />
 		            </buttons>
 	       		</ButtonBar>
-	       </top>"C:/Users/ronav/Documents/MainWindow.fxml"
+	       </top>
 		</BorderPane>
    </center>
    <bottom>

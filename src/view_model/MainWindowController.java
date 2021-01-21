@@ -293,7 +293,8 @@ public class MainWindowController implements Observer {
 		int[][] path = this.pathSolverModel.getPath();
 		this.map.setPath(path);
 	}
-
+	
+	@FXML
 	public void onJoystickRelease(MouseEvent event) {
 		circleJoystick.setCenterX(0);
 		circleJoystick.setCenterY(0);
@@ -305,7 +306,8 @@ public class MainWindowController implements Observer {
 	private double distance(double x1, double y1, double x2, double y2) {
 		return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 	}
-
+	
+	@FXML
 	public void onJoystickDrag(MouseEvent event) {
 		if (this.radioBtnManual.isSelected()) {
 			if (event.getX() <= 100 && event.getX() >= -100)
