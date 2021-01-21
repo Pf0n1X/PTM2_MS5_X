@@ -55,7 +55,7 @@
 		            	<Button fx:id="btnRunCodeCommands" mnemonicParsing="false" text="Run" />
 		            </buttons>
 	       		</ButtonBar>
-	       </top>
+	       </top>"C:/Users/ronav/Documents/MainWindow.fxml"
 		</BorderPane>
    </center>
    <bottom>
@@ -92,7 +92,7 @@
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Label>
-            <Circle fx:id="circleJoystick" fill="#407ba8" focusTraversable="true" layoutX="153.0" layoutY="161.0" radius="46.0" stroke="BLACK" strokeLineCap="ROUND" strokeWidth="3.0">
+            <Circle fx:id="circleJoystick" onMouseDragged="#onJoystickDrag" onMouseReleased="#onJoystickRelease" fill="#407ba8" focusTraversable="true" layoutX="153.0" layoutY="161.0" radius="46.0" stroke="BLACK" strokeLineCap="ROUND" strokeWidth="3.0">
                <effect>
                   <InnerShadow choke="0.53" height="40" radius="20" width="45" />
                </effect>
