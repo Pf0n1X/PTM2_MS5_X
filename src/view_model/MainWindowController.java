@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.util.Observable;
 import java.util.Observer;
 import clientX.Client;
-import clientX.SimpleClient;
+import clientX.DefaultClient;
 import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -73,7 +73,7 @@ public class MainWindowController implements Observer {
 	public MainWindowController() {
 		// TODO Auto-generated constructor stub
 		this.interpreter = new interpreterX.Interpreter();
-		this.client = new SimpleClient();
+		this.client = new DefaultClient();
 		this.planeLocModel = new PlaneLocationModel(this);
 		this.pathSolverModel = new PathSolverModel(this);
 		planeLocModel.setClient(client);

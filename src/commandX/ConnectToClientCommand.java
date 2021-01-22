@@ -1,10 +1,11 @@
 package commandX;
 
 import java.util.List;
-import clientX.SimpleClient;
+import clientX.DefaultClient;
 import interpreterX.DataManager;
 
 public class ConnectToClientCommand implements Command {
+	
 	// Constant Members
     public static final String COMMAND_NAME = "connect";
     
@@ -19,7 +20,7 @@ public class ConnectToClientCommand implements Command {
     // Methods
     @Override
     public int execute(List<String> arguments) {
-        manager.setClient(new SimpleClient());
+        manager.setClient(new DefaultClient());
         manager.getClient().connect(arguments.get(1),Integer.parseInt(arguments.get(2)));
         return 4;
     }

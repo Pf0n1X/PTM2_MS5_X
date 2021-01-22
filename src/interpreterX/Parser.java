@@ -92,13 +92,16 @@ public class Parser {
     public void Resume() {
         this.isStop = false;
         
+        // Check if the thread was already initialized
         if (parserThread != null) {
             try{
                 parserThread.start();
             } catch (IllegalThreadStateException e){
-                try{
+                try {
+                	
+                	// In case it was already started simply resume it.
                     parserThread.resume();
-                }catch (SecurityException e1){
+                } catch (SecurityException e1){
                     e1.printStackTrace();
                 }
             }

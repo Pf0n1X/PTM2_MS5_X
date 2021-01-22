@@ -22,7 +22,7 @@ public class Lexer {
         Scanner scanner;
         
         try {
-            while((line = reader.readLine())!=null) {
+            while((line = reader.readLine())!= null) {
                 scanner = new Scanner(line);
                 
                 while(scanner.hasNext()) {
@@ -49,6 +49,7 @@ public class Lexer {
                         words.add(token);
                     }
                 }
+                
                 words.add(EOL);
             }
         } catch (IOException e) {
@@ -63,7 +64,7 @@ public class Lexer {
     }
 
     public static List<String> Lexer(String[] script) {
-        List<String> list =new ArrayList<>();
+        List<String> list = new ArrayList<>();
         
         for (String line : script) {
             list.addAll(Lexer.Lexer(line));

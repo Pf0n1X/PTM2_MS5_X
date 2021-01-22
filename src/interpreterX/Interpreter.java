@@ -1,14 +1,11 @@
 package interpreterX;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
 import java.util.List;
 import ServerX.DataReaderServer;
-import clientX.SimpleClient;
+import clientX.DefaultClient;
 
 public class Interpreter {
 	
@@ -20,7 +17,7 @@ public class Interpreter {
         Parser parser = new Parser(manager);
         manager.setParser(parser);
         manager.setServer(new DataReaderServer(manager));
-        manager.setClient(new SimpleClient());
+        manager.setClient(new DefaultClient());
     }
     
     // Methods
@@ -31,19 +28,14 @@ public class Interpreter {
     }
 
     public void runSimulator(String[] lines) {
-//        try {
-//            String[] lines = Files.lines(fileScript.toPath()).toArray(String[]::new);
-            String text = String.join(System.lineSeparator(), lines);
-            runSimulator(text);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        String text = String.join(System.lineSeparator(), lines);
+        runSimulator(text);
     }
 
     public void setAutoPilot(boolean autoPilot){
-        if (autoPilot){
+        if (autoPilot) {
             this.manager.getParser().Resume();
-        }else if (!autoPilot){
+        } else if (!autoPilot) {
             this.manager.getParser().stop();
         }
     }

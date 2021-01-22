@@ -8,73 +8,77 @@ import interpreterX.Lexer;
 import interpreterX.ShuntingYard;
 
 public class Condition {
+	
+	// Data Members
     Predicate<Void> stringPredicate;
-
+    
+    // Constructors
     public Condition(DataManager environment, List<String> arguments)
     {
         List<String> stringList = arguments.subList(1, arguments.indexOf(Lexer.EOL)-1 );
-
         int indexsplit;
-        if ((indexsplit = stringList.indexOf(">="))!=-1)
-        {
+        
+        if ((indexsplit = stringList.indexOf(">="))!=-1) {
             int finalIndexsplit = indexsplit;
+            
             stringPredicate = s -> {
-                List<String> leftOperand=stringList.subList(0, finalIndexsplit );
-                List<String> rightOperand=stringList.subList(finalIndexsplit +1,stringList.size());
-                return ShuntingYard.calc(String.join("", leftOperand), environment) >= ShuntingYard.calc(String.join("", rightOperand), environment);
+                List<String> leftOp = stringList.subList(0, finalIndexsplit );
+                List<String> rightOp = stringList.subList(finalIndexsplit + 1, stringList.size());
+                
+                return ShuntingYard.calc(String.join("", leftOp), environment) >= ShuntingYard.calc(String.join("", rightOp), environment);
             };
-        }
-        else if ((indexsplit = stringList.indexOf("<="))!=-1)
-        {
+        } else if ((indexsplit = stringList.indexOf("<=")) != -1) {
             int finalIndexsplit = indexsplit;
+            
             stringPredicate = s -> {
-                List<String> leftOperand=stringList.subList(0, finalIndexsplit );
-                List<String> rightOperand=stringList.subList(finalIndexsplit +1,stringList.size());
-                return ShuntingYard.calc(String.join("", leftOperand), environment) <= ShuntingYard.calc(String.join("", rightOperand), environment);
+                List<String> leftOp = stringList.subList(0, finalIndexsplit );
+                List<String> rightOp = stringList.subList(finalIndexsplit + 1, stringList.size());
+                
+                return ShuntingYard.calc(String.join("", leftOp), environment) <= ShuntingYard.calc(String.join("", rightOp), environment);
             };
-        }
-        else if ((indexsplit = stringList.indexOf("=="))!=-1)
-        {
+        } else if ((indexsplit = stringList.indexOf("=="))!=-1) {
             int finalIndexsplit = indexsplit;
+            
             stringPredicate = s -> {
-                List<String> leftOperand=stringList.subList(0, finalIndexsplit );
-                List<String> rightOperand=stringList.subList(finalIndexsplit +1,stringList.size());
-                return ShuntingYard.calc(String.join("", leftOperand), environment) == ShuntingYard.calc(String.join("", rightOperand), environment);
+                List<String> leftOp = stringList.subList(0, finalIndexsplit );
+                List<String> rightOp = stringList.subList(finalIndexsplit + 1, stringList.size());
+                
+                return ShuntingYard.calc(String.join("", leftOp), environment) == ShuntingYard.calc(String.join("", rightOp), environment);
             };
-        }
-        else if ((indexsplit = stringList.indexOf("!="))!=-1)
-        {
+        } else if ((indexsplit = stringList.indexOf("!=")) != -1) {
             int finalIndexsplit = indexsplit;
+            
             stringPredicate = s -> {
-                List<String> leftOperand=stringList.subList(0, finalIndexsplit );
-                List<String> rightOperand=stringList.subList(finalIndexsplit +1,stringList.size());
-                return ShuntingYard.calc(String.join("", leftOperand), environment) != ShuntingYard.calc(String.join("", rightOperand), environment);
+                List<String> leftOp = stringList.subList(0, finalIndexsplit );
+                List<String> rightOp = stringList.subList(finalIndexsplit + 1, stringList.size());
+                
+                return ShuntingYard.calc(String.join("", leftOp), environment) != ShuntingYard.calc(String.join("", rightOp), environment);
             };
-        }
-        else if ((indexsplit = stringList.indexOf(">"))!=-1)
-        {
+        } else if ((indexsplit = stringList.indexOf(">"))!=-1) {
             int finalIndexsplit = indexsplit;
+            
             stringPredicate = s -> {
-                List<String> leftOperand=stringList.subList(0, finalIndexsplit );
-                List<String> rightOperand=stringList.subList(finalIndexsplit +1,stringList.size());
-                return ShuntingYard.calc(String.join("", leftOperand), environment) > ShuntingYard.calc(String.join("", rightOperand), environment);
+                List<String> leftOp = stringList.subList(0, finalIndexsplit );
+                List<String> rightOp = stringList.subList(finalIndexsplit + 1, stringList.size());
+                
+                return ShuntingYard.calc(String.join("", leftOp), environment) > ShuntingYard.calc(String.join("", rightOp), environment);
             };
-        }
-        else if ((indexsplit = stringList.indexOf("<"))!=-1)
-        {
+        } else if ((indexsplit = stringList.indexOf("<"))!=-1) {
             int finalIndexsplit = indexsplit;
+            
             stringPredicate = s -> {
-                List<String> leftOperand=stringList.subList(0, finalIndexsplit );
-                List<String> rightOperand=stringList.subList(finalIndexsplit +1,stringList.size());
-                return ShuntingYard.calc(String.join("", leftOperand), environment) < ShuntingYard.calc(String.join("", rightOperand), environment);
+                List<String> leftOp = stringList.subList(0, finalIndexsplit );
+                List<String> rightOp = stringList.subList(finalIndexsplit + 1, stringList.size());
+                
+                return ShuntingYard.calc(String.join("", leftOp), environment) < ShuntingYard.calc(String.join("", rightOp), environment);
             };
+        } else {
+            throw new RuntimeException("no operators founds");
         }
-        else
-            throw new RuntimeException("no operators founds");// TODO check in the future about while true or false
     }
-
-    public boolean evaluate()
-    {
+    
+    // Methods
+    public boolean evaluate() {
         return stringPredicate.test(null);
     }
 }

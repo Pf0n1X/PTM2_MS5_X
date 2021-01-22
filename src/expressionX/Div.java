@@ -16,10 +16,15 @@ public class Div extends BinaryExpression {
     @Override
     public String toString() {
         StringBuilder builder=new StringBuilder();
-        if (left != null)
+        
+        if (left != null) {
             builder.append(left.toString());
-        if (right != null)
+        }
+        
+        if (right != null) {
             builder.append(right.toString());
+        }
+        
         return builder.toString() + "/";
     }
 }
