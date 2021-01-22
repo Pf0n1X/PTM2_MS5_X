@@ -123,6 +123,8 @@ public class MainWindowController implements Observer {
 
 	public void onMapClicked(MouseEvent event) {
 		this.map.setDestination(event.getX() / this.map.getSqrWidth(), event.getY() / this.map.getSqrHeight());
+//		TODO: Add this if server is connected RON.
+//		calculatePath();
 		this.map.paintAll();
 	}
 
@@ -285,6 +287,7 @@ public class MainWindowController implements Observer {
 		this.pathSolverModel.calculateShortestPath();
 		int[][] path = this.pathSolverModel.getPath();
 		this.map.setPath(path);
+		this.map.paintAll();
 	}
 
 	@FXML

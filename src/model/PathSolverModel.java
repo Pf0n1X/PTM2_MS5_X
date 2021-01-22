@@ -68,6 +68,9 @@ public class PathSolverModel {
 			String responseLine;
 			responseLine = reader.readLine();
 			
+			System.out.println("Get response");
+			System.out.println(responseLine);
+			
 			this.setPath(buildPathFromResponse(responseLine));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -90,20 +93,20 @@ public class PathSolverModel {
 		for (int i = 1; i <= path.length; i++) {
 			switch (path[i - 1]) {
 				case "Up":
-					result[i][0] = result[i - 1][0];
-					result[i][1] = result[i - 1][1] - 1;
-					break;
-				case "Down":
-					result[i][0] = result[i - 1][0];
-					result[i][1] = result[i - 1][1] + 1;
-					break;
-				case "Left":
 					result[i][0] = result[i - 1][0] - 1;
 					result[i][1] = result[i - 1][1];
 					break;
-				case "Right":
+				case "Down":
 					result[i][0] = result[i - 1][0] + 1;
 					result[i][1] = result[i - 1][1];
+					break;
+				case "Left":
+					result[i][0] = result[i - 1][0];
+					result[i][1] = result[i - 1][1] - 1;
+					break;
+				case "Right":
+					result[i][0] = result[i - 1][0];
+					result[i][1] = result[i - 1][1] + 1;
 					break;
 			}
 		}
