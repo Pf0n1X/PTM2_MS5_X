@@ -110,16 +110,9 @@ public class MainWindowController implements Observer {
 		});
 
 		btnRunCodeCommands.setOnMouseClicked((event) -> {
-			String[] lines;
-
-			try {
-				lines = Files.lines(txt.toPath()).toArray(String[]::new);
-				interpreter.runSimulator(lines);
-				interpreter.getManager().getParser().Resume();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			String[] lines = this.txtCommands.getText().split("\n");
+			interpreter.runSimulator(lines);
+			interpreter.getManager().getParser().Resume();
 		});
 	}
 
