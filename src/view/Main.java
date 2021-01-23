@@ -6,6 +6,10 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader; 
 
+/*
+ * This project was made by Tomer Erusalimsky(208667162) and Ron Avraham(206910663)
+ * as a project for an advanced software development course. 
+ */
 public class Main extends Application {
 
 	@Override
