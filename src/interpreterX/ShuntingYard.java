@@ -43,7 +43,7 @@ public class ShuntingYard {
 	}
 
 	private static ArrayList<String> SplitStringExpression(String expression) throws Exception {
-		expression = expression.replace('ï¿½', '-');
+		expression = expression.replace('–','-');
 		ArrayList<String> arrayList = new ArrayList<>();
 		String[] expressionchar = expression.split("");
 		String num = "";
