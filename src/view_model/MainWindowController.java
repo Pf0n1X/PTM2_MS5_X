@@ -133,6 +133,11 @@ public class MainWindowController implements Observer {
 	}
 
 	public void onConnectButtonPressed() {
+		
+		if (!planeLocModel.getClient().isClosed()) {
+			return;
+		}
+		
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ConnectWindow.fxml"));
 			AnchorPane window = (AnchorPane) fxmlLoader.load();
@@ -258,6 +263,7 @@ public class MainWindowController implements Observer {
 
 	public void simulatorConnected() {
 		this.planeLocModel.run();
+		this.btnConnect.setDisable(true);
 	}
 
 	public void setPlaneCoordinates(double x, double y) {
@@ -354,5 +360,6 @@ public class MainWindowController implements Observer {
 
 	public void setServerConnected() {
 		this.pathSolverModel.setServerConnected(true);
+		this.btnCalc.setDisable(true);
 	}
 }
